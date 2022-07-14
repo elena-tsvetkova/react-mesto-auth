@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import {Route, Routes, Navigate, useNavigate} from 'react-router-dom';
+import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 import Header from './Header.js';
 import Footer from './Footer.js';
 import Main from './Main.js';
@@ -18,7 +18,7 @@ import InfoTooltip from "./InfoTooltip";
 
 
 function App() {
-    const history = useNavigate();
+    const history = useHistory();
     const initialData = {
         email: ''
     }
@@ -194,31 +194,42 @@ function App() {
     return (
         <div className="page">
             <CurrentUserContext.Provider value={currentUser}>
-                {/*<Header/>*/}
-                <Routes>
-                    <Route path='/mesto' element={<ProtectedRoute/>} exact loggedIn={loggedIn} isChecking={isAuthChecking}>
-                        <Route exact path='/mesto' element={<Main/>}                             onEditProfile={handleEditProfileClick}
+                <Header
+                    loggedIn={loggedIn}
+                    onSignOut={handleSignOut}
+                    userEmail={data.email}
+                />
+                <Switch>
+                    <ProtectedRoute
+                        path="/mesto"
+                        loggedIn={loggedIn}
+                        isChecking={isAuthChecking}
+                        exact>
+                        <Main
+                            onEditProfile={handleEditProfileClick}
                             onAddPlace={handleAddPlaceClick}
                             onEditAvatar={handleEditAvatarClick}
                             onCardClick={handleCardClick}
                             cards={cards}
                             onCardDelete={handleCardDelete}
                             onCardLike={handleCardLike}/>
-                        </Route>
-                    {/*<Route path='/sign-in' exact>*/}
-                    {/*    <Login onLogin={handleLogin}/>*/}
-                    {/*</Route>*/}
+                        />
+                    </ProtectedRoute>
 
-                    {/*<Route path='/sign-up' exact>*/}
-                    {/*    <Register onRegister={handleRegister}/>*/}
-                    {/*</Route>*/}
+                    <Route path='/sign-up' exact>
+                        <Register onRegister={handleRegister}/>
+                    </Route>
 
-                    {/*<Route path="*">*/}
-                    {/*    {loggedIn*/}
-                    {/*        ? <Navigate to="/mesto"/>*/}
-                    {/*        : <Navigate to="/sign-in"/>}*/}
-                    {/*</Route>*/}
-                </Routes>
+                    <Route path='/sign-in' exact>
+                        <Login onLogin={handleLogin}/>
+                    </Route>
+
+                    <Route path="*">
+                        {loggedIn
+                            ? <Redirect to="/mesto"/>
+                            : <Redirect to="/sign-in"/>}
+                    </Route>
+                </Switch>
                 <Footer/>
 
                 <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups}
@@ -232,11 +243,11 @@ function App() {
                                  onUpdateAvatar={handleUpdateAvatar}/>
                 <ImagePopup card={selectedCard} onClose={closeAllPopups}/>
 
-                {/*<InfoTooltip*/}
-                {/*    isOpen={isInfoTooltipPopupOpen}*/}
-                {/*    onClose={closePopup}*/}
-                {/*    isSuccess={isSuccess}*/}
-                {/*/>*/}
+                <InfoTooltip
+                    isOpen={isInfoTooltipPopupOpen}
+                    onClose={closePopup}
+                    isSuccess={isSuccess}
+                />
 
             </CurrentUserContext.Provider>
         </div>

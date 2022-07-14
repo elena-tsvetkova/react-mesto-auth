@@ -1,7 +1,26 @@
 import React from 'react';
+import { useFormWithValidation } from "../hooks/useFormWithValidation";
 
 const Login = ({ onLogin }) => {
+  const {
+    values,
+    handleChange,
+    resetFrom,
+    errors,
+    isValid,
+    isValidInputs
+  } = useFormWithValidation();
 
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    onLogin(values)
+      .then(resetFrom())
+      .catch(err => {
+        console.log(err.message || 'Что то пошло не так')
+      })
+  }
 return (
   <main className="main login">
     <div className="login__container">

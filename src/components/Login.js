@@ -14,12 +14,8 @@ const Login = ({ onLogin }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     onLogin(values)
-      .then(resetFrom())
-      .catch(err => {
-        console.log(err.message || 'Что то пошло не так')
-      })
+    resetFrom()
   }
 return (
   <main className="main login">

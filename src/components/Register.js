@@ -16,9 +16,7 @@ const Register = ({ onRegister }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     if (values.password !== values.confirmation) {
-
       resetFrom({
         email: values.email,
       }, {
@@ -31,10 +29,7 @@ const Register = ({ onRegister }) => {
     }
 
     onRegister(values)
-      .then(resetFrom())
-      .catch(err => {
-        console.log(err.message || 'Что то пошло не так')
-      })
+    resetFrom()
   }
 
   return (
